@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('search/', views.SearchWithParams.as_view(), name='firstname'),
+    path('search/with/Q/', views.SearchWithParamsWithQ.as_view(), name='both'),
 ]

@@ -65,3 +65,19 @@ class SearchWithParams(generics.ListAPIView):
 
         return queryset
 
+class SearchWithParamsWithQ(generics.ListAPIView):
+    serializer_class = CrudSerializer
+
+    def get_queryset(self):
+        query = Q()
+        queryset = Crud.objects.all()
+
+        firstName = self.request.query_params.get("firstname")
+        email = self.request.query_params.get("email")
+        if firstName and email is not None:
+
+            query = query & Q(name__icontains=firstName)
+            query = query & Q(email__exact=email)
+            queryset  = queryset.filter(query)
+            # queryset  = queryset.filter(Q(name__icontains=firstName) & Q(email__exact=email))
+        return queryset
