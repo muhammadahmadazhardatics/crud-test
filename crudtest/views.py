@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.generics import get_object_or_404
+from rest_framework import generics
 from rest_framework.response import Response
 from .serializers import CrudSerializer
 from .models import Crud
-
+from django.db.models import Q
 class CrudViewSet(viewsets.ViewSet):
 
     def list(self, request):
@@ -50,3 +51,17 @@ class CrudViewSet(viewsets.ViewSet):
         # instance = get_object_or_404(self.get_queryset(), pk=pk)
         instance.delete()
         return Response({"delete": True})
+
+
+class SearchWithParams(generics.ListAPIView):
+    serializer_class = CrudSerializer
+
+    def get_queryset(self):
+        queryset = Crud.objects.all()
+
+        firstName = self.request.query_params.get("firstname")
+        if firstName is not None:
+            queryset  = queryset.filter(name__icontains=firstName)
+
+        return queryset
+

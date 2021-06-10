@@ -9,4 +9,5 @@ router.register("crud", views.CrudViewSet, basename="crud")
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
+    path('search/', views.SearchWithParams.as_view(), name='firstname'),
 ]
